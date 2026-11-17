@@ -1,0 +1,27 @@
+{
+  "name": "trajectory",
+  "version": "0.1.0",
+  "description": "Skills for setting up benchmarks, running evals and training, and investigating runs on Trajectory with the Trajectory SDK.",
+  "author": {
+    "name": "Trajectory"
+  },
+  "homepage": "https://docs.trajectory.ai",
+  "repository": "https://github.com/Trajectorylabs/skills",
+  "license": "Apache-2.0",
+  "keywords": ["trajectory", "reinforcement-learning", "training", "evals", "benchmarks", "agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Trajectory",
+    "shortDescription": "Train and evaluate agents on Trajectory",
+    "longDescription": "Skills for setting up benchmarks, running evals and training, and investigating runs on Trajectory with the Trajectory SDK.",
+    "developerName": "Trajectory",
+    "category": "Coding",
+    "capabilities": ["Read", "Write", "Interactive"],
+    "websiteURL": "https://docs.trajectory.ai",
+    "defaultPrompt": [
+      "Explain what happened in my latest Trajectory training run",
+      "Run a baseline eval on my Trajectory benchmark",
+      "Why is my Trajectory run's reward flat?"
+    ]
+  }
+}

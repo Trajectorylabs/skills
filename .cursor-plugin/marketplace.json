@@ -1,0 +1,13 @@
+{
+  "name": "trajectory",
+  "owner": {
+    "name": "Trajectory"
+  },
+  "plugins": [
+    {
+      "name": "trajectory",
+      "source": "./",
+      "description": "Skills for setting up benchmarks, running evals and training, and investigating runs on Trajectory with the Trajectory SDK."
+    }
+  ]
+}
