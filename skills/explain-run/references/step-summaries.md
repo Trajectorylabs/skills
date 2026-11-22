@@ -1,6 +1,6 @@
 # Reading step summaries
 
-`client.training.runs.list_step_summaries` returns one row per training step. The fields
+`get_step_summaries` returns one row per training step. The fields
 that explain most reward questions:
 
 | Pattern | What it usually means | Check next |

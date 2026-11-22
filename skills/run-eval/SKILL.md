@@ -1,6 +1,11 @@
 ---
 name: run-eval
 description: Run an evaluation on a Trajectory benchmark and read its result, from choosing the benchmark and model through an agreed plan and cost to the score. Use when someone wants a baseline, wants to score a base model or a trained checkpoint, or asks how a model does on a benchmark that has no eval yet.
+metadata:
+  artemis-requires: sandbox writes
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[benchmark] [model or checkpoint]"
+  artemis-summary: "Evaluate a model on a benchmark"
 ---
 
 # Run an eval
@@ -16,7 +21,9 @@ deployment.
 ## 1. Pick the benchmark and model
 
 - Benchmark: the `bench_id` given, or `tj benchmarks list --json` and ask which one.
-  `tj benchmarks readiness BENCH_ID --json` must say ready; if not, that is `fix-benchmark`.
+  `tj benchmarks readiness BENCH_ID --json` must say ready. If not, report
+  `unready_task_image_counts` and `missing_secret_names` and stop: the benchmark needs
+  fixing before an eval.
 - A base model: `tj evals models --json` for models and prices, then
   `tj evals options --bench-id BENCH_ID --json` for the bounds of the one you recommend.
 - A trained checkpoint: `client.training.checkpoints.list(training_run_id)`, then pass its

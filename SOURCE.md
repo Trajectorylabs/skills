@@ -8,7 +8,7 @@ them here; edit the source and let the copy follow.
 The ten task skills come from `Trajectorylabs/trajectory` at
 `backend/api/artemis/plugin/skills/`.
 
-- Copied from `Trajectorylabs/trajectory` at `865b9dbfb6ea286bf1eec79d66f28abe17b3963a` (`main`).
+- Copied from `Trajectorylabs/trajectory` at `50f9d300efdad048214e63bff87b7dfd752fef4a` (`main`).
 
 A workflow in that repository opens a pull request here whenever they change on its
 `main`, and rewrites the line above.

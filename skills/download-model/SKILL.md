@@ -1,6 +1,11 @@
 ---
 name: download-model
 description: Download a trained Trajectory checkpoint's weights, either its LoRA adapter or the full model with the adapter merged in, to a folder the person chooses. Use when someone wants to download, export or take a checkpoint or trained model off the platform, or to run it on their own serving stack.
+metadata:
+  artemis-requires: sandbox
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[checkpoint or run] [adapter or merged]"
+  artemis-summary: "Download a trained checkpoint's weights"
 ---
 
 # Download a model
