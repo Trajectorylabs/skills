@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "artemis": {
+      "url": "https://api.trajectory.ai/mcp",
+      "env_http_headers": {
+        "X-API-Key": "TRAJECTORY_API_KEY"
+      }
+    }
+  }
+}

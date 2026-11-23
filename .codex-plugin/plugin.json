@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "keywords": ["trajectory", "reinforcement-learning", "training", "evals", "benchmarks", "agents"],
   "skills": "./skills/",
+  "mcpServers": "./.codex-mcp.json",
   "interface": {
     "displayName": "Trajectory",
     "shortDescription": "Train and evaluate agents on Trajectory",
