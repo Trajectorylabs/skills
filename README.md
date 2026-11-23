@@ -57,7 +57,28 @@ codex plugin add trajectory@trajectory
 cursor-agent plugin marketplace add https://github.com/Trajectorylabs/skills
 ```
 
-Then install `trajectory` from `/plugin`.
+Then install `trajectory` from `/plugin`. In Cursor the plugin brings the skills only.
+
+## The Trajectory MCP server
+
+In Claude Code and Codex the plugin also adds Trajectory's hosted MCP server,
+`https://api.trajectory.ai/mcp`, named `artemis`. It reads your organization's agents,
+benchmarks, runs, trajectories and costs, can ask Artemis, Trajectory's assistant, and can
+start or cancel runs.
+
+**Sign in.** Leave `TRAJECTORY_API_KEY` unset. On first use your agent opens a browser, and a
+member of your organization approves the app on platform.trajectory.ai:
+
+- Claude Code: run `/mcp`, choose `plugin:trajectory:artemis`, then Authenticate.
+- Codex: run `codex mcp login artemis`.
+
+Approving creates an organization API key that can read and change everything in that
+organization and does not expire; revoke it under Settings → Developer access. For CI or other
+headless use, set `TRAJECTORY_API_KEY` instead; the plugin sends it as `X-API-Key`.
+
+**Write tools act at once.** `create_training_run` and `create_eval_run` start paid work, and
+the cancel tools stop runs, as soon as they are called. Your agent's own permission prompt is the
+only check, so keep these tools on "ask". See https://docs.trajectory.ai for the full tool list.
 
 ## Skills
 
@@ -88,11 +109,6 @@ To pick up a new copy:
 - Cursor: refresh the marketplace from `/plugin`.
 
 Ask a running agent to reload its skills afterwards.
-
-## Roadmap
-
-- A hosted, read-only Trajectory MCP server is in review. The plugin will add it once it
-  is available; until then the skills use the SDK and CLI only.
 
 ## Problems
 

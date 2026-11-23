@@ -1,5 +1,4 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "trajectory",
   "version": "0.1.0",
   "description": "Skills for setting up benchmarks, running evals and training, and investigating runs on Trajectory with the Trajectory SDK.",
@@ -9,5 +8,6 @@
   "homepage": "https://docs.trajectory.ai",
   "repository": "https://github.com/Trajectorylabs/skills",
   "license": "Apache-2.0",
+  "mcpServers": "./.codex-mcp.json",
   "keywords": ["trajectory", "reinforcement-learning", "training", "evals", "benchmarks", "agents"]
 }
