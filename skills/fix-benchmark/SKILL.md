@@ -1,6 +1,11 @@
 ---
 name: fix-benchmark
 description: Work out why a Trajectory benchmark cannot launch or does not grade (failed image builds, tasks missing a run command or runtime, missing secrets, a failed diagnostic, grader errors, readiness that stays false) and fix it in the benchmark's source. Use when a benchmark is not ready, an upload or build failed, or its runs record errors or no grades.
+metadata:
+  artemis-requires: sandbox writes
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[benchmark name or ID]"
+  artemis-summary: "Fix a benchmark that won't build or grade"
 ---
 
 # Fix a benchmark

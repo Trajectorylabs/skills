@@ -1,11 +1,16 @@
 ---
 name: write-run-report
 description: Write up an analysis of one Trajectory training or eval run, or a comparison of several, as a report someone can act on and check. Use when someone asks for a report, write-up, summary or post-mortem of a run, or for the findings of an investigation in a form they can share.
+metadata:
+  artemis-requires: none
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[run IDs or names]"
+  artemis-summary: "Write a shareable report on a run"
 ---
 
 # Write a run report
 
-Builds on the `trajectory` skill: connect, find IDs and link resources the way it says.
+Every tool result carries the platform URL of each resource it names: link with those.
 Read only. This skill sets the standard for the report; the analysis comes from
 `explain-run`, `compare-runs` or `diagnose-reward`.
 
@@ -26,7 +31,7 @@ win: send the summary section alone, in that surface's syntax, and offer the res
 
 ## 2. The evidence bar
 
-- Every number comes from a tool result or SDK response in this session and says what it
+- Every number comes from a tool result in this session and says what it
   measures: the run, the metric, the step, and how many trajectories it rests on. A number
   you computed says what from.
 - Every run, eval and trajectory is linked the first time it appears, or named by its ID.

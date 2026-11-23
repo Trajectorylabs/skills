@@ -1,6 +1,11 @@
 ---
 name: start-training
 description: Size, launch and watch a first training run on a Trajectory benchmark, with an agreed budget and a rule for when to stop. Use when someone wants to train or fine-tune a model on a benchmark, start a smoke training run, or resume training from a checkpoint.
+metadata:
+  artemis-requires: sandbox writes
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[benchmark] [base model]"
+  artemis-summary: "Plan and launch a training run"
 ---
 
 # Start training
