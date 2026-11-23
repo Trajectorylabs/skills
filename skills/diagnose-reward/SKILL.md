@@ -1,11 +1,16 @@
 ---
 name: diagnose-reward
 description: Investigate why a Trajectory training run's reward is flat, falling, noisy or suspiciously high, and what to try next. Use when someone asks why a run is not learning, why reward will not climb or dropped, or whether a result is too good to be true, however they name the run (a run ID, a name, or the latest run on a benchmark).
+metadata:
+  artemis-requires: none
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[training run ID or name]"
+  artemis-summary: "Find out why a run's reward is stuck"
 ---
 
 # Diagnose reward
 
-Builds on the `trajectory` skill: connect, find IDs and link resources the way it says.
+Every tool result carries the platform URL of each resource it names: link with those.
 Read only: propose experiments, never launch, cancel or resume anything.
 
 Do every check in order. The only early exits are in check 2. Check 6 reads trajectories
@@ -16,19 +21,18 @@ and is never skipped: the numbers show that reward is stuck, only trajectories s
 
 | Given | Resolve with |
 | --- | --- |
-| A `trn_` ID | `client.training.runs.retrieve` (`tj training get ID --json`) |
-| An `evr_` ID | `client.evals.runs.retrieve`; diagnose its `training_run_id` if it has one, otherwise use `explain-run` |
-| A name, or part of one | A tool that finds runs by name, if you have one; otherwise `client.benchmarks.list`, then `client.training.runs.list` on the benchmark, matching `display_name` |
+| A `trn_` ID | `get_training_run` |
+| An `evr_` ID | `get_eval_run`; diagnose its `training_run_id` if it has one, otherwise use `explain-run` |
+| A name, or part of one | A tool that finds runs by name, if you have one; otherwise `list_benchmarks`, then `list_training_runs` on the benchmark, matching `display_name` |
 | Any other identifier | A tool that finds runs by it, if you have one; otherwise ask for the run ID or name |
-| "The latest run on" a benchmark | `client.benchmarks.list`, then `client.training.runs.list` (`tj training list --bench-id ID --json`), newest first |
+| "The latest run on" a benchmark | `list_benchmarks`, then `list_training_runs`, newest first |
 
 If several runs match and none is clearly meant, list them and ask. Name the run you
 picked in the first line of the answer.
 
 ## 2. Check it is training
 
-`client.training.runs.retrieve` and `client.training.runs.progress`
-(`tj training details ID --json` has both).
+`get_training_run` and `get_training_progress`.
 
 - `failed`: quote `failure.code` and `failure.message`. That is the answer; stop.
 - No completed steps: the run is waiting or collecting its first batch, not flat. Run
@@ -38,23 +42,23 @@ picked in the first line of the answer.
 ## 3. Config
 
 Diff the run's `options`, base model and `parent_checkpoint_id` against the last healthy
-run on the benchmark: the newest from `client.training.runs.list` with
+run on the benchmark: the newest from `list_training_runs` with
 `status=["succeeded"]` whose reward history rose. Follow the `compare-runs` skill's
 [config diff reference](../compare-runs/references/config-diff.md) and name every
 difference. With no healthy run, say the config was judged on its own.
 
 ## 4. Reward
 
-- `client.training.rewards.list_history`: name the shape (flat at zero, flat above zero,
+- `get_reward_history`: name the shape (flat at zero, flat above zero,
   falling, noisy, high from the first step) from steps with `pending_count` 0. Compare the
   swing between neighbouring steps with the total change, and note `trajectory_count`.
-- `client.training.rewards.list_held_out_rewards`: use only rounds with `round_completed`
+- `get_held_out_rewards`: use only rounds with `round_completed`
   true and `completed_samples` equal to `expected_samples`. Say whether held-out reward
   follows training reward. With no completed round, generalisation is unknown.
 
 ## 5. Endings and group signal
 
-`client.training.runs.list_step_summaries` for every step, read with the `explain-run`
+`get_step_summaries` for every step, read with the `explain-run`
 skill's [step summaries reference](../explain-run/references/step-summaries.md). Per
 step, find the share of rollouts that did not end in `ENV_DONE` (`error_count`,
 `incomplete_count`, `termination_reasons`) and the share of groups without signal
@@ -68,11 +72,10 @@ Required, whatever checks 3 to 5 showed.
 1. Choose the step where reward or endings changed, else the latest settled step, and one
    early step for contrast.
 2. At each, take the two or three lowest-reward and the two or three highest-reward
-   trajectories. With the SDK, `client.training.rewards.list_trajectory_rewards` ranks a
-   step's trajectories. Otherwise page `client.trajectories.list` with `training_run_id`,
+   trajectories. Page `list_trajectories` with `training_run_id`,
    keep the ones whose `policy_step` matches, and say how many you ranked.
-3. For each, `client.trajectories.retrieve` with `include_reward_components=True`, then
-   `client.trajectories.steps.list` from the first step: the task, what the agent did turn
+3. For each, `get_trajectory` for its reward components, then
+   `get_trajectory_steps` from the first step: the task, what the agent did turn
    by turn, how it ended, how it was graded.
 
 Then answer, giving the sample size:
@@ -91,8 +94,8 @@ Quote the lines that show each point, with trajectory ID, agent step and role.
 
 ## 7. Optimizer metrics
 
-Only if you have a tool that reads the metrics the trainer logged; the SDK and CLI do not
-return them, so without one go on to check 8. List the names the run logged, then read
+Only if you have a tool that reads the metrics the trainer logged; the read tools above do
+not return them, so without one go on to check 8. List the names the run logged, then read
 loss, KL, entropy, gradient norm, the learning rate applied and the reward health rates
 over the whole run. [references/causes.md](references/causes.md) ("Optimizer metrics")
 says what counts. A name with no data means this run did not log it, not that it is zero.

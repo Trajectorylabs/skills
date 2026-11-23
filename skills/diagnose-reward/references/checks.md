@@ -9,7 +9,7 @@ The `compare-runs` config diff says which differences matter. These values are s
 even with nothing to diff against:
 
 - `learning_rate` an order of magnitude from the model's default
-  (`client.training.list_options`): too high and reward rises then collapses, too low and
+  (`guides/training.mdx`): too high and reward rises then collapses, too low and
   it stays flat.
 - `num_steps` at or below `lr_warmup_steps`: the whole run is warm-up.
 - `group_size` or `min_trajectories_per_group` at the minimum, or `temperature` near zero:
@@ -30,7 +30,7 @@ An option that is missing or null was left at its default; call it "default".
 
 - Flat at exactly zero, or at one constant value: suspect grading before learning.
 - High from the first step: the tasks are easy for this model, or reward is earned without
-  solving them. A baseline eval of the base model (`client.evals.runs.list`) tells which.
+  solving them. A baseline eval of the base model (`list_eval_runs`) tells which.
 - A swing between neighbouring steps as large as the whole rise: noise. A small
   `trajectory_count` per point is noisy by construction.
 - A fall that starts as warm-up ends points at the learning rate; one that starts where
@@ -56,7 +56,5 @@ An option that is missing or null was left at its default; call it "default".
 - The reward is the weighted average of each component's `scaled_value`: a `weight` 0
   component moves without changing it, and one heavy component at its ceiling hides the
   rest.
-- A missing secret (`client.benchmarks.retrieve_readiness`, `missing_secret_names`) stops
+- A missing secret (the benchmark's readiness lists `missing_secret_names`) stops
   a judge that needs it.
-- With the SDK, `client.trajectories.list_events(tid)` shows grader output the harness
-  logged.

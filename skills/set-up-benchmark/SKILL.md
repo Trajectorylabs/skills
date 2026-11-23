@@ -1,6 +1,11 @@
 ---
 name: set-up-benchmark
 description: Take a benchmark from a repository to ready on Trajectory by packaging its tasks, harness and grader, uploading it to an agent, building its runtime images and checking readiness. Use when someone wants to bring, upload, ingest or integrate a benchmark or spec, or to build the images of one that is already uploaded.
+metadata:
+  artemis-requires: sandbox writes
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[repository path or URL]"
+  artemis-summary: "Bring a benchmark onto Trajectory"
 ---
 
 # Set up a benchmark

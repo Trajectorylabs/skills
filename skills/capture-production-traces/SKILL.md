@@ -1,6 +1,11 @@
 ---
 name: capture-production-traces
 description: Connect an existing application's agent to Trajectory so its real conversations are recorded as production trajectories on an agent. Use when someone wants to capture, log or collect production traces or live traffic, or to attach their application's model calls to a Trajectory agent.
+metadata:
+  artemis-requires: sandbox
+  artemis-user-invocable: "true"
+  artemis-argument-hint: "[agent name]"
+  artemis-summary: "Record your app's live agent conversations"
 ---
 
 # Capture production traces
