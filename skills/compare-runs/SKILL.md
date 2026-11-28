@@ -13,12 +13,18 @@ metadata:
 Every tool result carries the platform URL of each resource it names: link with those.
 Read only. To explain a single run in depth, use the `explain-run` skill.
 
+For project-wide comparisons, use the [full project inventory recipe](../analyze-spec/references/project-inventory.md)
+when a sandbox is available. Finder results are bounded newest sets, not full project
+inventories. Without a sandbox, use the paginated per-spec list tools and state which
+specs were inspected. With a sandbox, read independent trajectory evidence together
+using the [trajectory read recipe](../analyze-spec/references/trajectory-reads.md).
+
 ## 1. Check the runs are comparable
 
 Read each run with `get_training_run` or `get_eval_run`, then
 list what differs before comparing any number:
 
-- Benchmark (`bench_id`). Different benchmarks, or versions of one, are not comparable;
+- Spec (`bench_id`). Different specs, or versions of one, are not comparable;
   say so and stop unless the person only wants a side-by-side.
 - Base model, parent checkpoint (`parent_checkpoint_id`), and for eval runs the evaluated
   training run and `step`.
@@ -58,6 +64,6 @@ list what differs before comparing any number:
 
 - First line: which run did better on what measure, by how much, with both links.
 - Then the differences in setup that could explain it, observed data first.
-- Call out anything that makes the comparison weak: different benchmarks or task sets,
+- Call out anything that makes the comparison weak: different specs or task sets,
   incomplete rounds, unfinished runs, small samples.
 - A table helps for three or more runs: one row per run, the same columns for each.

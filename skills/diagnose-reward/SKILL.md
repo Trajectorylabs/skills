@@ -13,6 +13,10 @@ metadata:
 Every tool result carries the platform URL of each resource it names: link with those.
 Read only: propose experiments, never launch, cancel or resume anything.
 
+For an SFT run's loss question, use `explain-run` and its SFT loss guidance; the RL reward and
+group checks here do not diagnose supervised loss. A loss curve alone does not establish its
+cause, convergence or a future stopping threshold.
+
 Do every check in order. The only early exits are in check 2. Check 6 reads trajectories
 and is never skipped: the numbers show that reward is stuck, only trajectories show why.
 [references/checks.md](references/checks.md) lists what a bad result looks like.
@@ -23,9 +27,9 @@ and is never skipped: the numbers show that reward is stuck, only trajectories s
 | --- | --- |
 | A `trn_` ID | `get_training_run` |
 | An `evr_` ID | `get_eval_run`; diagnose its `training_run_id` if it has one, otherwise use `explain-run` |
-| A name, or part of one | A tool that finds runs by name, if you have one; otherwise `list_benchmarks`, then `list_training_runs` on the benchmark, matching `display_name` |
+| A name, or part of one | A tool that finds runs by name, if you have one; otherwise `list_specs`, then `list_training_runs` on the spec, matching `display_name` |
 | Any other identifier | A tool that finds runs by it, if you have one; otherwise ask for the run ID or name |
-| "The latest run on" a benchmark | `list_benchmarks`, then `list_training_runs`, newest first |
+| "The latest run on" a spec | `list_specs`, then `list_training_runs`, newest first |
 
 If several runs match and none is clearly meant, list them and ask. Name the run you
 picked in the first line of the answer.
@@ -42,7 +46,7 @@ picked in the first line of the answer.
 ## 3. Config
 
 Diff the run's `options`, base model and `parent_checkpoint_id` against the last healthy
-run on the benchmark: the newest from `list_training_runs` with
+run on the spec: the newest from `list_training_runs` with
 `status=["succeeded"]` whose reward history rose. Follow the `compare-runs` skill's
 [config diff reference](../compare-runs/references/config-diff.md) and name every
 difference. With no healthy run, say the config was judged on its own.
@@ -78,13 +82,16 @@ Required, whatever checks 3 to 5 showed.
    `get_trajectory_steps` from the first step: the task, what the agent did turn
    by turn, how it ended, how it was graded.
 
+With a sandbox, follow the [trajectory read recipe](../analyze-spec/references/trajectory-reads.md)
+to fetch the selected trajectories' details and steps together.
+
 Then answer, giving the sample size:
 
 - Components: does one sit at its maximum while the others never move, does the one that
   moves have `weight` 0, or are any missing?
 - Grading: is there `ENV_DONE` with reward 0 and no components (no grade was recorded), an
   `ERROR` naming the grader or judge, or one `explanation` or one reward on every
-  trajectory? `reference/troubleshooting.mdx` ("Rewards are flat at zero") tells a graded
+  trajectory? The [troubleshooting guide](https://docs.trajectory.ai/reference/troubleshooting.md) ("Rewards are flat at zero") tells a graded
   zero from a missing grade.
 - Behaviour: did the worst fail the task, or did the environment or grader fail them? Did
   the best solve the task, or only satisfy the grader (a short answer with no tool use, an
@@ -98,7 +105,8 @@ Only if you have a tool that reads the metrics the trainer logged; the read tool
 not return them, so without one go on to check 8. List the names the run logged, then read
 loss, KL, entropy, gradient norm, the learning rate applied and the reward health rates
 over the whole run. [references/causes.md](references/causes.md) ("Optimizer metrics")
-says what counts. A name with no data means this run did not log it, not that it is zero.
+says what counts. Preserve selected versus unfiltered populations when interpreting rates.
+A name with no data means this run did not log it, not that it is zero.
 
 ## 8. Rank the causes
 

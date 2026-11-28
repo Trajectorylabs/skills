@@ -17,5 +17,15 @@ that explain most reward questions:
 (1, between 0 and 1, and 0). A turn is one agent step inside a trajectory; a training step
 is one optimizer step. Keep the two apart when you write.
 
+These rollout summaries and the trainer's selected batches describe different populations.
+Metrics under `train/reward_health/` without an `_unfiltered` suffix cover selected training
+trajectories. A selected batch whose zero-reward share equals its truncation share does not prove
+that every zero-reward rollout in the run was truncated. Check unfiltered metrics or the relevant
+trajectory records before making a claim about all collected rollouts. State the population of
+any rate, including when comparing it with these summaries.
+Equal marginal rates alone do not identify the same trajectories, even within one population.
+Forced termination includes timeout as well as truncation; use joint reward/ending metrics or
+trajectory records to establish which endings received which rewards.
+
 `settled` is false while `used_groups` and `discarded_groups` can still change. Do not
 call a recent, unsettled step's counts final.
