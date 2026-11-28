@@ -1,26 +1,25 @@
 ---
 name: capture-production-traces
-description: Connect an existing application's agent to Trajectory so its real conversations are recorded as production trajectories on an agent. Use when someone wants to capture, log or collect production traces or live traffic, or to attach their application's model calls to a Trajectory agent.
+description: Connect an existing application's agent to Trajectory so its real conversations are recorded as production trajectories on a project. Use when someone wants to capture, log or collect production traces or live traffic, or to attach their application's model calls to a Trajectory project (formerly an agent).
 metadata:
   artemis-requires: sandbox
   artemis-user-invocable: "true"
-  artemis-argument-hint: "[agent name]"
+  artemis-argument-hint: "[project name]"
   artemis-summary: "Record your app's live agent conversations"
 ---
 
 # Capture production traces
 
 Builds on the `trajectory` skill: connect, find IDs and link resources the way it says.
-Production traces must be enabled for the organization. `guides/production-traces.mdx` is
-the contract for the integration (`tj docs --topic capture --json` locates it); read it
-first.
+Production traces must be enabled for the organization. The [production trace guide](https://docs.trajectory.ai/guides/production-traces.md) is
+the integration contract. Read it first.
 
 This skill changes the person's application and sends one real conversation to
-Trajectory. It needs no benchmark, training run or deployment: create none.
+Trajectory. It needs no spec, training run or deployment: create none.
 
 ## 1. Check the ground
 
-- The agent the traces belong to: the `agent_id` given, or `tj agents list --json` and
+- The project the traces belong to: its ID (`agent_id`) given, or `tj projects list --json` and
   ask. Create one only if asked.
 - If a call says capture is not enabled, stop and tell the person to ask Trajectory for
   access.
@@ -31,11 +30,11 @@ Find where the application calls its model, where a conversation starts and ends
 tells it the outcome. `tj init --template connect --assistant copy --json` prints a setup
 prompt and starts nothing. Then follow the guide:
 
-- One trajectory per conversation, attached with `agent_id`, with an idempotency key from
+- One trajectory per conversation, attached to the project by its `agent_id`, with an idempotency key from
   the application's own request ID.
 - That trajectory's ID on every model call in the conversation.
 - A reward only where the application already knows the outcome. Do not invent a grader.
-- Completion with the ending that happened (`guides/termination-reasons.mdx`).
+- Completion with the ending that happened ([termination reasons](https://docs.trajectory.ai/guides/termination-reasons.md)).
 
 Keep the application's model, deployment, prompts, tools, retries and error handling. If
 capture would mean switching models or providers, stop and put that choice to the person.
@@ -59,6 +58,6 @@ with `PlatformLinks.production(agent_id, trajectory_id=...)`.
 
 ## Done when
 
-One real conversation, chosen by the person, is stored on the agent as a completed
+One real conversation, chosen by the person, is stored on the project as a completed
 production trajectory, and they have its link and the list of files you changed. If
 capture is not enabled or the model cannot be kept, they know that and nothing was sent.

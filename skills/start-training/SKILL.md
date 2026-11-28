@@ -1,17 +1,17 @@
 ---
 name: start-training
-description: Size, launch and watch a first training run on a Trajectory benchmark, with an agreed budget and a rule for when to stop. Use when someone wants to train or fine-tune a model on a benchmark, start a smoke training run, or resume training from a checkpoint.
+description: Size, launch and watch a first training run on a Trajectory spec (formerly a benchmark), with an agreed budget and a rule for when to stop. Use when someone wants to train or fine-tune a model on a spec or benchmark, start a smoke training run, or resume training from a checkpoint.
 metadata:
   artemis-requires: sandbox writes
   artemis-user-invocable: "true"
-  artemis-argument-hint: "[benchmark] [base model]"
+  artemis-argument-hint: "[spec] [base model]"
   artemis-summary: "Plan and launch a training run"
 ---
 
 # Start training
 
 Builds on the `trajectory` skill: connect, find IDs and link resources the way it says.
-`guides/training.mdx` defines every option and how each affects spend; `pricing.mdx` has
+The [training guide](https://docs.trajectory.ai/guides/training.md) defines every option and how each affects spend; [pricing](https://docs.trajectory.ai/pricing.md) has
 the rates.
 
 A training run is billed for sampled and trained tokens and for sandbox time, and nothing
@@ -20,8 +20,8 @@ stated plan, budget and stop rule. Never deploy a model from this skill.
 
 ## 1. Check the ground
 
-- The benchmark: the `bench_id` given, or `tj benchmarks list --json` and ask which one.
-  `tj benchmarks readiness BENCH_ID --json` must say ready.
+- The spec: its ID (`bench_id`) given, or `tj specs list --json` and ask which one.
+  `tj specs readiness BENCH_ID --json` must say ready.
 - It must permit training and have training tasks; otherwise say so and stop.
 - A baseline: `tj evals list --bench-id BENCH_ID --json`. Without a completed eval of the
   base model there is nothing to compare a checkpoint with and no proof the grader records
@@ -52,7 +52,7 @@ not establish improvement.
 
 ## 3. Confirm
 
-State the plan in one message and wait for an explicit yes: the benchmark and `bench_id`,
+State the plan in one message and wait for an explicit yes: the spec and `bench_id`,
 the model, the options away from default, the expected trajectories and cost with what
 they assume, and the stop rule. A workable stop rule: "if it has started N rollouts and
 completed no step, I will come back and recommend cancelling", with N a small multiple of
@@ -70,7 +70,7 @@ tj training watch TRAINING_RUN_ID --timeout 300
 
 Repeat `watch`; stopping it never cancels the run. Between waits read
 `tj training details TRAINING_RUN_ID --json` (progress, reward history, checkpoints) and
-`client.training.runs.list_step_summaries(run_id)`. Healthy is completed steps rising,
+`client.rl.runs.list_step_summaries(run_id)`. Healthy is completed steps rising,
 `used_groups` above zero on settled steps, and most rollouts ending in `ENV_DONE`.
 
 ## 5. Know when to stop
@@ -90,5 +90,5 @@ On their yes, `tj training cancel TRAINING_RUN_ID`, then watch until the status 
 
 The run is `succeeded` and the person has its link, steps, training reward at the start
 and end, held-out reward for completed rounds, and its checkpoints
-(`client.training.checkpoints.list`), with an offer to eval one through `run-eval`. If it
+(`client.rl.checkpoints.list`), with an offer to eval one through `run-eval`. If it
 failed or was cancelled: `failure` quoted or the reason it was stopped, and what it spent.

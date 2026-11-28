@@ -12,7 +12,7 @@ metadata:
 
 Builds on the `trajectory` skill: connect, find IDs and link resources the way it says.
 Checkpoint downloads must be enabled for the organization, and merged models separately.
-`guides/checkpoint-downloads.mdx` is the contract: supported models, precisions, sizes,
+The [checkpoint download guide](https://docs.trajectory.ai/guides/checkpoint-downloads.md) is the contract: supported models, precisions, sizes,
 arguments and errors. There is no `tj` command for this; use the SDK.
 
 This skill writes files to the person's disk. Do not start a training run, eval or
@@ -20,10 +20,10 @@ deployment.
 
 ## 1. Pin down the checkpoint
 
-The `checkpoint_id` given, or `client.training.checkpoints.list(training_run_id)`: show the
+The `checkpoint_id` given, or `client.rl.checkpoints.list(training_run_id)`: show the
 steps and ask which, unless they said "latest" (the highest `step_index`). Do not pick one
 by reward without saying so; held-out reward by step
-(`client.training.rewards.list_held_out_rewards`) is the evidence for "best".
+(`client.rl.rewards.list_held_out_rewards`) is the evidence for "best".
 
 ## 2. Choose the format
 

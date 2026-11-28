@@ -2,7 +2,7 @@
 
 A run's config is its `options` plus `bench_id`, `base_model_slug` and
 `parent_checkpoint_id`, and for an eval `task_selection`, `total_rollouts`,
-`training_run_id` and `step`. `guides/training.mdx` ("Training options") defines every
+`training_run_id` and `step`. The [training guide](https://docs.trajectory.ai/guides/training.md) ("Training options") defines every
 option; report values and cite it for meaning.
 
 ## How to diff

@@ -10,7 +10,7 @@ and the main reason, with the run's link.
 ## The run
 
 Name, ID and link; status, with `failure.code` and `failure.message` if it failed;
-benchmark name and `bench_id`; base model and parent checkpoint; completed against
+spec name and `bench_id`; base model and parent checkpoint; completed against
 budgeted steps, or scored, failed and unfinished rollouts; the options set away from
 default.
 

@@ -1,6 +1,6 @@
 # What a bad result looks like
 
-`guides/training.mdx` defines every option named here and `guides/termination-reasons.mdx`
+The [training guide](https://docs.trajectory.ai/guides/training.md) defines every option named here and [termination reasons](https://docs.trajectory.ai/guides/termination-reasons.md)
 every ending. Cite the option or ending with its value; do not explain it.
 
 ## Check 3: config
@@ -9,7 +9,7 @@ The `compare-runs` config diff says which differences matter. These values are s
 even with nothing to diff against:
 
 - `learning_rate` an order of magnitude from the model's default
-  (`guides/training.mdx`): too high and reward rises then collapses, too low and
+  ([training guide](https://docs.trajectory.ai/guides/training.md)): too high and reward rises then collapses, too low and
   it stays flat.
 - `num_steps` at or below `lr_warmup_steps`: the whole run is warm-up.
 - `group_size` or `min_trajectories_per_group` at the minimum, or `temperature` near zero:
@@ -56,5 +56,5 @@ An option that is missing or null was left at its default; call it "default".
 - The reward is the weighted average of each component's `scaled_value`: a `weight` 0
   component moves without changing it, and one heavy component at its ceiling hides the
   rest.
-- A missing secret (the benchmark's readiness lists `missing_secret_names`) stops
+- A missing secret (the spec's readiness lists `missing_secret_names`) stops
   a judge that needs it.

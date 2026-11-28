@@ -45,11 +45,18 @@ The API does not return these. Check 7 reads them when a tool for them is availa
 otherwise a cause that depends on them stays a hypothesis. Names vary with the algorithm
 and backend, so list them and pick by meaning.
 
+`train/reward_health/` metrics without `_unfiltered` describe selected training trajectories. Keep that
+population separate from all collected rollouts and step summaries. For example, matching
+selected zero-reward and truncation rates cannot rule out zero-reward finished or discarded
+rollouts elsewhere in the run. Retrieve unfiltered evidence before making that broader claim.
+Matching marginal rates alone do not prove overlap; forced endings also include timeouts.
+Use joint metrics or trajectory records to connect an ending with its reward.
+
 | Signal | What counts |
 | --- | --- |
 | Loss | Flat while groups carry signal: updates too small |
 | KL | Near zero throughout: the policy is not moving. Spiking before reward falls: updates too large |
 | Entropy, else token surprisal or mean log-probability | Near zero: the policy collapsed onto one behaviour, so rewards in a group tie |
 | Gradient norm | At the clip value on every step, or near zero: the same two stories as KL |
-| Learning rate applied | Against the options and the schedule in `guides/training.mdx`: still in warm-up, or decayed away, explains a flat stretch |
+| Learning rate applied | Against the options and the schedule in the [training guide](https://docs.trajectory.ai/guides/training.md): still in warm-up, or decayed away, explains a flat stretch |
 | Reward health rates | Zero-reward rate near 1: nothing scores, and check 6 says why. Forced-termination rate high: rollouts are cut off. Forced full-reward rate above zero: full reward for rollouts that never finished |
